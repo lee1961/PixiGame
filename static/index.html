@@ -1,235 +1,244 @@
 <script src="pixi.min.js"></script>
 <!doctype html>
 <meta charset="utf-8">
-<style>* {padding: 0; margin: 0}</style>
+<style>* {
+    padding: 0;
+    margin: 0
+}</style>
 <title>Hello World</title>
 <body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
     var socket = io();
     // function success() {
     //     this.socket.emit('connect',"hey i ma here");
     // };
 
-  </script>
-  <script src="pixi.min.js"></script>
-  <script>
+</script>
+<script src="pixi.min.js"></script>
+<script>
 
-  // //Test that Pixi is working
-  // console.log(PIXI);
-  //
-  // //Create the renderer
-  // var renderer = PIXI.autoDetectRenderer(
-  //   256, 256,
-  //  {antialias: false, transparent: false, resolution: 1}
-  // );
-  //
-  // renderer.view.style.border = "5px dashed blue"
-  // renderer.backgroundColor = 0x061639;
-  // renderer.view.style.position = "absolute";
-  // renderer.view.style.display = "block";
-  // renderer.autoResize = true;
-  // renderer.resize(window.innerWidth, window.innerHeight);
-
-  //Aliases
-  var Container = PIXI.Container,
-  autoDetectRenderer = PIXI.autoDetectRenderer,
-  loader = PIXI.loader,
-  resources = PIXI.loader.resources,
-  TextureCache = PIXI.utils.TextureCache,
-  Rectangle = PIXI.Rectangle,
-  Sprite = PIXI.Sprite;
-
-  //Create a Pixi stage and renderer and add the
-  //renderer.view to the DOM
-  var stage = new Container(),
-  renderer = autoDetectRenderer(512, 512);
-  document.body.appendChild(renderer.view);
-
-  //load an image and run the `setup` function when it's done
-  loader
-  .add("images/cat.png")
-  .add("images/tileset.png")
-  .on("progress", loadProgressHandler)
-  .load(setup);
-
-  function loadProgressHandler(loader,resource) {
-    //Display the file `url` currently being loaded
-    console.log("loading: " + resource.url);
-
-    //Display the precentage of files currently loaded
-    console.log("progress: " + loader.progress + "%");
-
-    //If you gave your files names as the first argument
-    //of the `add` method, you can access them like this
-    //console.log("loading: " + resource.name);
-    // console.log("the socket id isssssss " + socket.id);
+    // //Test that Pixi is working
+    // console.log(PIXI);
     //
-    // console.log("the socke")
-
-  }
-  socket.on('uniqueID',function(data) {
-    console.log("the assigned uniqueID is " + data)
-  });
-
-  var cat_1;
-  var state;
-  function setup() {
-    //the socket setup
-    socket.emit('socketID',{socketID: socket.id});
-
-    //Create the `cat_1` sprite, add it to the stage, and render it
-    cat_1 = new Sprite(resources["images/cat.png"].texture);
-    cat_1.vx = 0;
-    cat_1.vy = 0;
-
-    cat_2 = new Sprite(resources["images/cat.png"].texture);
-    cat_2.vx = 0;
-    cat_2.vy = 0;
-    cat_2.position.set(400,96)
-
-    cat_1.position.set(0,96)
-    stage.addChild(cat_1);
-    stage.addChild(cat_2);
-    renderer.render(stage);
-
-    // //Create the `tileset` sprite from the texture
-    // var texture = TextureCache["images/tileset.png"];
+    // //Create the renderer
+    // var renderer = PIXI.autoDetectRenderer(
+    //   256, 256,
+    //  {antialias: false, transparent: false, resolution: 1}
+    // );
     //
-    // //Create a rectangle object that defines the position and
-    // //size of the sub-image you want to extract from the texture
-    // var rectangle = new Rectangle(192, 128, 64, 64);
-    //
-    // //Tell the texture to use that rectangular section
-    // texture.frame = rectangle;
-    //
-    // //Create the sprite from the texture
-    // var rocket = new Sprite(texture);
-    //
-    // //Position the rocket sprite on the canvas
-    // rocket.x = 32;
-    // rocket.y = 32;
-    // stage.addChild(rocket);
-    // //Render the stage
-    // renderer.render(stage);
-    //Capture the keyboard arrow keys
-    var left = keyboard(37),
-    up = keyboard(38),
-    right = keyboard(39),
-    down = keyboard(40);
+    // renderer.view.style.border = "5px dashed blue"
+    // renderer.backgroundColor = 0x061639;
+    // renderer.view.style.position = "absolute";
+    // renderer.view.style.display = "block";
+    // renderer.autoResize = true;
+    // renderer.resize(window.innerWidth, window.innerHeight);
 
-    //Left arrow key `press` method
-    left.press = function() {
+    //Aliases
+    var Container = PIXI.Container,
+        autoDetectRenderer = PIXI.autoDetectRenderer,
+        loader = PIXI.loader,
+        resources = PIXI.loader.resources,
+        TextureCache = PIXI.utils.TextureCache,
+        Rectangle = PIXI.Rectangle,
+        Sprite = PIXI.Sprite;
 
-      //Change the cat_1's velocity when the key is pressed
-      cat_1.vx = -5;
-      cat_1.vy = 0;
-    };
+    //Create a Pixi stage and renderer and add the
+    //renderer.view to the DOM
+    var stage = new Container(),
+        renderer = autoDetectRenderer(512, 512);
+    document.body.appendChild(renderer.view);
 
-    //Left arrow key `release` method
-    left.release = function() {
+    //load an image and run the `setup` function when it's done
+    loader
+        .add("images/cat.png")
+        .add("images/tileset.png")
+        .on("progress", loadProgressHandler)
+        .load(setup);
 
-      //If the left arrow has been released, and the right arrow isn't down,
-      //and the cat_1 isn't moving vertically:
-      //Stop the cat_1
-      if (!right.isDown && cat_1.vy === 0) {
+    function loadProgressHandler(loader, resource) {
+        //Display the file `url` currently being loaded
+        console.log("loading: " + resource.url);
+
+        //Display the precentage of files currently loaded
+        console.log("progress: " + loader.progress + "%");
+
+        //If you gave your files names as the first argument
+        //of the `add` method, you can access them like this
+        //console.log("loading: " + resource.name);
+        // console.log("the socket id isssssss " + socket.id);
+        //
+        // console.log("the socke")
+
+    }
+    socket.on('uniqueID', function (data) {
+        console.log("the assigned uniqueID is " + data)
+    });
+    socket.on('givenSocketID',function(data) {
+       console.log("my given socket id is " + data);
+    });
+
+    var cat_1;
+    var state;
+    function setup() {
+        //the socket setup
+        socket.emit('socketID', {socketID: socket.id});
+
+        //Create the `cat_1` sprite, add it to the stage, and render it
+        cat_1 = new Sprite(resources["images/cat.png"].texture);
         cat_1.vx = 0;
-      }
-    };
-
-    //Up
-    up.press = function() {
-      cat_1.vy = -5;
-      cat_1.vx = 0;
-    };
-    up.release = function() {
-      if (!down.isDown && cat_1.vx === 0) {
         cat_1.vy = 0;
-      }
-    };
 
-    //Right
-    right.press = function() {
-      cat_1.vx = 5;
-      cat_1.vy = 0;
-    };
-    right.release = function() {
-      if (!left.isDown && cat_1.vy === 0) {
-        cat_1.vx = 0;
-      }
-    };
+        cat_2 = new Sprite(resources["images/cat.png"].texture);
+        cat_2.vx = 0;
+        cat_2.vy = 0;
+        cat_2.position.set(400, 96)
 
-    //Down
-    down.press = function() {
-      cat_1.vy = 5;
-      cat_1.vx = 0;
-    };
-    down.release = function() {
-      if (!up.isDown && cat_1.vx === 0) {
-        cat_1.vy = 0;
-      }
-    };
-    state = play;
-    gameLoop();
+        cat_1.position.set(0, 96)
+        stage.addChild(cat_1);
+        stage.addChild(cat_2);
+        renderer.render(stage);
+
+        // //Create the `tileset` sprite from the texture
+        // var texture = TextureCache["images/tileset.png"];
+        //
+        // //Create a rectangle object that defines the position and
+        // //size of the sub-image you want to extract from the texture
+        // var rectangle = new Rectangle(192, 128, 64, 64);
+        //
+        // //Tell the texture to use that rectangular section
+        // texture.frame = rectangle;
+        //
+        // //Create the sprite from the texture
+        // var rocket = new Sprite(texture);
+        //
+        // //Position the rocket sprite on the canvas
+        // rocket.x = 32;
+        // rocket.y = 32;
+        // stage.addChild(rocket);
+        // //Render the stage
+        // renderer.render(stage);
+        //Capture the keyboard arrow keys
+        var left = keyboard(37),
+            up = keyboard(38),
+            right = keyboard(39),
+            down = keyboard(40);
+
+        //Left arrow key `press` method
+        left.press = function () {
+
+            //Change the cat_1's velocity when the key is pressed
+            cat_1.vx = -5;
+            cat_1.vy = 0;
+        };
+
+        //Left arrow key `release` method
+        left.release = function () {
+
+            //If the left arrow has been released, and the right arrow isn't down,
+            //and the cat_1 isn't moving vertically:
+            //Stop the cat_1
+            if (!right.isDown && cat_1.vy === 0) {
+                cat_1.vx = 0;
+            }
+        };
+
+        //Up
+        up.press = function () {
+            cat_1.vy = -5;
+            cat_1.vx = 0;
+
+            socket.emit('up_press',socket);
+
+        };
+        up.release = function () {
+            if (!down.isDown && cat_1.vx === 0) {
+                cat_1.vy = 0;
+            }
+        };
+
+        //Right
+        right.press = function () {
+            cat_1.vx = 5;
+            cat_1.vy = 0;
+        };
+        right.release = function () {
+            if (!left.isDown && cat_1.vy === 0) {
+                cat_1.vx = 0;
+            }
+        };
+
+        //Down
+        down.press = function () {
+            cat_1.vy = 5;
+            cat_1.vx = 0;
+        };
+        down.release = function () {
+            if (!up.isDown && cat_1.vx === 0) {
+                cat_1.vy = 0;
+            }
+        };
+        state = play;
+        gameLoop();
 
 
-  }
-  function gameLoop() {
+    }
+    function gameLoop() {
 
-    //Loop this function at 60 frames per second
-    requestAnimationFrame(gameLoop);
+        //Loop this function at 60 frames per second
+        requestAnimationFrame(gameLoop);
 
-    //Update the current game state:
-    state();
+        //Update the current game state:
+        state();
 
-    //Render the stage to see the animation
-    renderer.render(stage);
-  }
+        //Render the stage to see the animation
+        renderer.render(stage);
+    }
 
-  function play() {
-    //Use the cat_1's velocity to make it move
-    cat_1.x += cat_1.vx;
-    cat_1.y += cat_1.vy
-  }
+    function play() {
+        //Use the cat_1's velocity to make it move
+        cat_1.x += cat_1.vx;
+        cat_1.y += cat_1.vy
+    }
 
 
-  function keyboard(keyCode) {
-    var key = {};
-    key.code = keyCode;
-    key.isDown = false;
-    key.isUp = true;
-    key.press = undefined;
-    key.release = undefined;
-    //The `downHandler`
-    key.downHandler = function(event) {
-      if (event.keyCode === key.code) {
-        if (key.isUp && key.press) key.press();
-        key.isDown = true;
-        key.isUp = false;
-      }
-      event.preventDefault();
-    };
-
-    //The `upHandler`
-    key.upHandler = function(event) {
-      if (event.keyCode === key.code) {
-        if (key.isDown && key.release) key.release();
+    function keyboard(keyCode) {
+        var key = {};
+        key.code = keyCode;
         key.isDown = false;
         key.isUp = true;
-      }
-      event.preventDefault();
-    };
+        key.press = undefined;
+        key.release = undefined;
+        //The `downHandler`
+        key.downHandler = function (event) {
+            if (event.keyCode === key.code) {
+                if (key.isUp && key.press) key.press();
+                key.isDown = true;
+                key.isUp = false;
+            }
+            event.preventDefault();
+        };
 
-    //Attach event listeners
-    window.addEventListener(
-      "keydown", key.downHandler.bind(key), false
-    );
-    window.addEventListener(
-      "keyup", key.upHandler.bind(key), false
-    );
-    return key;
-  }
+        //The `upHandler`
+        key.upHandler = function (event) {
+            if (event.keyCode === key.code) {
+                if (key.isDown && key.release) key.release();
+                key.isDown = false;
+                key.isUp = true;
+            }
+            event.preventDefault();
+        };
+
+        //Attach event listeners
+        window.addEventListener(
+            "keydown", key.downHandler.bind(key), false
+        );
+        window.addEventListener(
+            "keyup", key.upHandler.bind(key), false
+        );
+        return key;
+    }
 
 
-  </script>
+</script>
 </body>
