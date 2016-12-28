@@ -63,11 +63,20 @@
     //If you gave your files names as the first argument
     //of the `add` method, you can access them like this
     //console.log("loading: " + resource.name);
-    socket.emit('clientEvent','Sent and event from the client!');
+    // console.log("the socket id isssssss " + socket.id);
+    //
+    // console.log("the socke")
+
   }
+  socket.on('uniqueID',function(data) {
+    console.log("the assigned uniqueID is " + data)
+  });
+
   var cat_1;
   var state;
   function setup() {
+    //the socket setup
+    socket.emit('socketID',{socketID: socket.id});
 
     //Create the `cat_1` sprite, add it to the stage, and render it
     cat_1 = new Sprite(resources["images/cat.png"].texture);
