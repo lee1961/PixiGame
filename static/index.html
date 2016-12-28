@@ -7,6 +7,10 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io();
+    // function success() {
+    //     this.socket.emit('connect',"hey i ma here");
+    // };
+
   </script>
   <script src="pixi.min.js"></script>
   <script>
@@ -59,6 +63,7 @@
     //If you gave your files names as the first argument
     //of the `add` method, you can access them like this
     //console.log("loading: " + resource.name);
+    socket.emit('clientEvent','Sent and event from the client!');
   }
   var cat_1;
   var state;
@@ -74,7 +79,7 @@
     cat_2.vy = 0;
     cat_2.position.set(400,96)
 
-    cat_1.position.set(0,96 )
+    cat_1.position.set(0,96)
     stage.addChild(cat_1);
     stage.addChild(cat_2);
     renderer.render(stage);
